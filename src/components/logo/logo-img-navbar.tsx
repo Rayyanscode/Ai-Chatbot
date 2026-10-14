@@ -1,0 +1,29 @@
+import Box, { BoxProps } from '@mui/material/Box';
+// routes
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
+
+const LOGO_SRC = '/logo/Mindlyft.png';
+
+export default function LogoImgNavbar({ sx, ...other }: BoxProps) {
+  return (
+    <Box
+      component={RouterLink}
+      href={paths.dashboard.root}
+      sx={{ display: 'contents', cursor: 'pointer' }}
+    >
+      <Box
+        component="img"
+        src={LOGO_SRC}
+        alt="logo"
+        sx={{
+          width: 150,
+          height: 80,
+          display: 'inline-flex',
+          ...sx,
+        }}
+        {...other}
+      />
+    </Box>
+  );
+}
