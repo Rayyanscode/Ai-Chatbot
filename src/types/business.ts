@@ -5,6 +5,7 @@ export type Business = {
   description: string;
   avatar: string;
   location: string;
+  publicKey?: string;
   fullDescription?: string;
   email?: string;
   phone?: string;

@@ -11,14 +11,19 @@ import Stack from '@mui/material/Stack';
 // components
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFUpload } from 'src/components/hook-form';
+import { uploadDocument } from 'src/api/documents';
 
 // ----------------------------------------------------------------------
 
-export default function Documents() {
+type Props = {
+  onSuccess?: () => void;
+};
+
+export default function DocumentsUpload({ onSuccess }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
   const schema = Yup.object().shape({
-    documents: Yup.array().min(1, 'Please upload at least one document'),
+    documents: Yup.array().min(1, 'Please upload at least one PDF'),
   });
 
   const defaultValues = {
@@ -62,11 +67,24 @@ export default function Documents() {
     setValue('documents', [], { shouldValidate: true });
   }, [setValue]);
 
-  const onSubmit = handleSubmit(async () => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      enqueueSnackbar('Documents uploaded', { variant: 'success' });
+      const files = data.documents || [];
+
+      for (let i = 0; i < files.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        await uploadDocument(files[i]);
+      }
+
+      enqueueSnackbar(
+        files.length === 1
+          ? `"${files[0].name}" uploaded successfully`
+          : `${files.length} files uploaded successfully`,
+        { variant: 'success' }
+      );
       setValue('documents', []);
-    } catch (error) {
+      onSuccess?.();
+    } catch (error: any) {
       enqueueSnackbar(error?.message ?? 'Upload failed', { variant: 'error' });
     }
   });
@@ -85,11 +103,7 @@ export default function Documents() {
         <RHFUpload
           multiple
           name="documents"
-          accept={{
-            'application/pdf': ['.pdf'],
-            'application/msword': ['.doc'],
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-          }}
+          accept={{ 'application/pdf': ['.pdf'] }}
           onDrop={handleDrop}
           onRemove={handleRemove}
           onRemoveAll={handleRemoveAll}
@@ -104,6 +118,8 @@ export default function Documents() {
             ml: { xs: 0, sm: 'auto' },
             width: { xs: 1, sm: 'auto' },
             textTransform: 'none',
+            bgcolor: '#64BFB8',
+            '&:hover': { bgcolor: '#4fa8a1' },
           }}
         >
           Upload

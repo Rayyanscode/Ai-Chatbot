@@ -42,6 +42,7 @@ export function mapBusiness(item: any): Business {
     description: item.description || item.contactInfo || '',
     avatar: item.avatar || initials(name) || 'B',
     location: item.location || item.address || item.city || '',
+    publicKey: item.publicKey || item.public_key || undefined,
     fullDescription: item.fullDescription || item.about || item.description || item.contactInfo,
     email: item.email || item.contactEmail,
     phone: item.phone || item.contactInfo,
@@ -90,11 +91,11 @@ export function useGetBusiness(id?: string) {
 }
 
 export async function sendBusinessChat(
-  businessId: string,
+  publicKey: string,
   message: string,
   history: ChatMessage[] = []
 ) {
-  const response = await axios.post(endpoints.businesses.chat(businessId), {
+  const response = await axios.post(endpoints.businesses.chat(publicKey), {
     message,
     history: history.map((item) => ({
       role: item.role,
@@ -104,8 +105,10 @@ export async function sendBusinessChat(
 
   const payload = response.data;
   return (
+    payload?.answer ||
     payload?.reply ||
     payload?.message ||
+    payload?.data?.answer ||
     payload?.data?.reply ||
     payload?.data?.message ||
     payload?.data?.content ||

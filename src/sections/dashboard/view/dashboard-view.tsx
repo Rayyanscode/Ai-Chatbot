@@ -9,7 +9,7 @@ import { alpha, useTheme } from '@mui/material/styles';
 
 import { useAuthContext } from 'src/auth/hooks';
 import Iconify from 'src/components/iconify';
-import Documents from '../documents';
+import DocumentsUpload from 'src/sections/documents/documents-upload';
 
 // ----------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ export default function DashboardView() {
         <Typography variant="h6" sx={{ mb: 2 }}>
           Knowledge base
         </Typography>
-        <Documents />
+        <DocumentsUpload />
       </Box>
     </Container>
   );

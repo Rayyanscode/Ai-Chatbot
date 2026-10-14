@@ -180,7 +180,9 @@ export default function BusinessDetailView({ businessId }: Props) {
         </Typography>
       </Container>
 
-      <ChatPopup businessId={business.id} businessName={business.name} />
+      {business.publicKey && (
+        <ChatPopup publicKey={business.publicKey} businessName={business.name} />
+      )}
     </Box>
   );
 }

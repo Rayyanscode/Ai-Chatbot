@@ -19,20 +19,13 @@ import type { ChatMessage } from 'src/types/business';
 // ----------------------------------------------------------------------
 
 type Props = {
-  businessId: string;
+  publicKey: string;
   businessName: string;
 };
 
-export default function ChatPopup({ businessId, businessName }: Props) {
+export default function ChatPopup({ publicKey, businessName }: Props) {
   const [chatOpen, setChatOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: '0',
-      role: 'assistant',
-      content: `Hi! I'm the AI assistant for ${businessName}. How can I help you today?`,
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -60,7 +53,7 @@ export default function ChatPopup({ businessId, businessName }: Props) {
     setIsTyping(true);
 
     try {
-      const reply = await sendBusinessChat(businessId, text, nextHistory);
+      const reply = await sendBusinessChat(publicKey, text, nextHistory);
       const botMsg: ChatMessage = {
         id: `${Date.now()}-bot`,
         role: 'assistant',

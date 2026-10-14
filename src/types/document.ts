@@ -1,7 +1,8 @@
 export type DocumentItem = {
   id: string;
   name: string;
-  size: string;
+  status: string;
+  chunkCount?: number;
   uploadedAt: string;
-  url: string;
+  url?: string;
 };

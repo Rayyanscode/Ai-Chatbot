@@ -151,12 +151,12 @@ export const endpoints = {
   },
   documents: {
     list: '/documents',
-    upload: '/documents/upload',
+    upload: '/documents',
     delete: (id: string) => `/documents/${id}`,
   },
   businesses: {
     list: '/businesses',
     detail: (id: string) => `/businesses/${id}`,
-    chat: (id: string) => `/businesses/${id}/chat`,
+    chat: (publicKey: string) => `/chat/${publicKey}`,
   },
 };
