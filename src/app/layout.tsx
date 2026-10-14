@@ -57,30 +57,30 @@ export const metadata = {
   icons: [
     {
       rel: 'icon',
-      url: '/favicon/favicon.ico',
+      url: '/favicon/favicon.ico?v=2',
     },
     {
       rel: 'icon',
       type: 'image/png',
       sizes: '96x96',
-      url: '/favicon/favicon-96x96.png',
+      url: '/favicon/favicon-96x96.png?v=2',
     },
     {
       rel: 'icon',
       type: 'image/png',
       sizes: '192x192',
-      url: '/favicon/web-app-manifest-192x192.png',
+      url: '/favicon/web-app-manifest-192x192.png?v=2',
     },
     {
       rel: 'icon',
       type: 'image/png',
       sizes: '32x32',
-      url: '/favicon/favicon-32x32.png',
+      url: '/favicon/favicon-32x32.png?v=2',
     },
     {
       rel: 'apple-touch-icon',
       sizes: '180x180',
-      url: '/favicon/apple-touch-icon.png',
+      url: '/favicon/apple-touch-icon.png?v=2',
     },
   ],
 };

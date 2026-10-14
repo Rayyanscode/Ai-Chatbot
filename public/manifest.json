@@ -1,6 +1,6 @@
 {
-  "name": "mindlyft",
-  "short_name": "mindlyft",
+  "name": "AI Customer Support",
+  "short_name": "AI Support",
   "display": "standalone",
   "start_url": "/",
   "theme_color": "#000000",
