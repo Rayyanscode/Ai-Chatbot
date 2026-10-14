@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -26,6 +27,7 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomLoadingButton from 'src/components/button/custon-loading-button';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +43,7 @@ export default function JwtLoginView() {
   const returnTo = searchParams.get('returnTo');
 
   const passwordInput = useBoolean();
+  const signupPopover = usePopover();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
@@ -121,7 +124,7 @@ export default function JwtLoginView() {
         }}
       />
 
-      <Link
+      {/* <Link
         variant="body2"
         color="inherit"
         underline="always"
@@ -130,7 +133,7 @@ export default function JwtLoginView() {
         href={paths.auth.jwt.forgotPassword}
       >
         Forgot password?
-      </Link>
+      </Link> */}
 
       <CustomLoadingButton
         fullWidth
@@ -156,10 +159,37 @@ export default function JwtLoginView() {
 
       <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
         Don&apos;t have an account?{' '}
-        <Link component={RouterLink} href={paths.auth.jwt.register}>
+        <Link
+          component="button"
+          type="button"
+          onClick={signupPopover.onOpen}
+          sx={{ verticalAlign: 'baseline' }}
+        >
           Sign up
         </Link>
       </Typography>
+
+      <CustomPopover
+        open={signupPopover.open}
+        onClose={signupPopover.onClose}
+        arrow="top-center"
+        sx={{ width: 180 }}
+      >
+        <MenuItem
+          component={RouterLink}
+          href={paths.auth.jwt.register}
+          onClick={signupPopover.onClose}
+        >
+          Business Admin
+        </MenuItem>
+        <MenuItem
+          component={RouterLink}
+          href={paths.auth.jwt.customer}
+          onClick={signupPopover.onClose}
+        >
+          Customer
+        </MenuItem>
+      </CustomPopover>
     </Stack>
   );
 

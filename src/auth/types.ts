@@ -22,11 +22,16 @@ export type AuthStateType = {
 };
 
 type JWTRegisterPayload = {
-  name: string;
+  businessName: string;
   email: string;
   password: string;
-  primaryUserEmail?: string;
-  isInvited?: boolean;
+  contactInfo: string;
+};
+type JWTCustomerRegisterPayload = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
 };
 
 // ----------------------------------------------------------------------

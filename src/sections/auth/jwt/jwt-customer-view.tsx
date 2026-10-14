@@ -30,7 +30,7 @@ import FormProvider, { RHFCheckbox, RHFTextField } from 'src/components/hook-for
 // ----------------------------------------------------------------------
 
 export default function JwtCustomerView() {
-  const { register } = useAuthContext();
+  // const { register } = useAuthContext();
 
   const router = useRouter();
 
@@ -43,10 +43,6 @@ export default function JwtCustomerView() {
     firstName: Yup.string().required('First name required'),
     lastName: Yup.string().required('Last name required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    primaryUserEmail: Yup.string()
-      .email('Email must be a valid email address')
-      .notOneOf([Yup.ref('email')], 'Email must not be the same as the caregiver  email')
-      .optional(),
     password: Yup.string()
       .required('Password is required')
       .min(8, 'Password must be at least 8 characters long'),
@@ -54,22 +50,14 @@ export default function JwtCustomerView() {
       .required('Confirm password is required')
       .oneOf([Yup.ref('password')], 'Passwords must match')
       .min(8, 'Password must be at least 8 characters long'),
-    isOver18: Yup.boolean().oneOf([true], 'You must confirm that you are over 18 years old'),
-    agreeToTerms: Yup.boolean().oneOf(
-      [true],
-      'You must agree to the Terms & Conditions and Privacy Policy'
-    ),
   });
 
   const defaultValues = {
     firstName: '',
     lastName: '',
     email: '',
-    primaryUserEmail: '',
     password: '',
     confirmPassword: '',
-    isOver18: false,
-    agreeToTerms: false,
   };
 
   const methods = useForm({
@@ -85,15 +73,14 @@ export default function JwtCustomerView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const payload = {
-        name: `${data.firstName} ${data.lastName}`,
-        email: data.email,
-        primaryUserEmail: data.primaryUserEmail || undefined,
-        password: data.password,
-      };
-      await register(payload);
+      // const payload = {
+      //   name: `${data.firstName} ${data.lastName}`,
+      //   email: data.email,
+      //   password: data.password,
+      // };
+      // await register(payload);
       enqueueSnackbar('Registration successful', { variant: 'success' });
-      router.push(`${paths.auth.jwt.otpVerification}?email=${encodeURIComponent(data.email)}`);
+      router.push(paths.dashboard.root);
     } catch (error) {
       console.error(error);
       reset();
@@ -137,13 +124,6 @@ export default function JwtCustomerView() {
         />
 
         <RHFTextField
-          name="primaryUserEmail"
-          label="Primary User Email"
-          variant="outlined"
-          InputLabelProps={{ shrink: true }}
-        />
-
-        <RHFTextField
           name="password"
           label="Password*"
           type={password.value ? 'text' : 'password'}
@@ -179,122 +159,6 @@ export default function JwtCustomerView() {
           }}
         />
 
-        <Stack spacing={1}>
-          <Stack direction="row" alignItems="flex-start" justifyContent="space-between">
-            <RHFCheckbox
-              name="isOver18"
-              label={
-                <Typography variant="body2" color="text.secondary" sx={{ mt: 0.8 }}>
-                  Are you over 18 years old?
-                </Typography>
-              }
-              sx={{ m: 0, alignItems: 'flex-start' }}
-            />
-
-            <Tooltip
-              title={
-                <Typography
-                  component="span"
-                  sx={{
-                    display: 'block',
-                    fontStyle: 'italic',
-                    fontSize: 13,
-                    lineHeight: 1.5,
-                    color: '#637381',
-                    bgcolor: '#F3F3F3',
-                    textAlign: 'left',
-                  }}
-                >
-                  By continuing, you confirm that you are 18 years or older.
-                </Typography>
-              }
-              placement="top"
-              arrow
-              enterDelay={200}
-              leaveDelay={100}
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    {
-                      name: 'offset',
-                      options: {
-                        offset: [0, -6],
-                      },
-                    },
-                  ],
-                },
-                tooltip: {
-                  sx: {
-                    bgcolor: '#F3F3F3',
-                    color: '#637381',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '10px',
-                    px: 2,
-                    py: 1.5,
-                    maxWidth: 240,
-                    boxShadow: '0px 4px 16px rgba(15, 23, 42, 0.08)',
-                    '& .MuiTooltip-arrow': {
-                      color: '#F9FAFB',
-                      '&::before': {
-                        backgroundColor: '#F9FAFB',
-                        border: '1px solid #E5E7EB',
-                      },
-                    },
-                  },
-                },
-              }}
-            >
-              <IconButton
-                size="small"
-                sx={{
-                  color: '#9CA3AF',
-                  mt: 0.5,
-                  width: 28,
-                  height: 28,
-                  bgcolor: 'transparent',
-                  '&:hover': {
-                    bgcolor: '#F3F4F6',
-                  },
-                }}
-              >
-                <Iconify icon="eva:info-outline" width={18} />
-              </IconButton>
-            </Tooltip>
-          </Stack>
-
-          <RHFCheckbox
-            name="agreeToTerms"
-            label={
-              <Typography variant="body2" color="text.secondary" component="span" sx={{ mt: 0.8 }}>
-                I agree to the{' '}
-                <Link
-                  href={paths.auth.termsAndConditions}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="none"
-                  sx={{ color: '#64BFB8' }}
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  Terms & Conditions
-                </Link>
-                {' and '}
-                <Link
-                  href={paths.auth.privacyPolicy}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  underline="none"
-                  sx={{ color: '#64BFB8' }}
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  Privacy Policy
-                </Link>
-                .
-              </Typography>
-            }
-            sx={{ m: 0, alignItems: 'flex-start' }}
-          />
-        </Stack>
-
         <LoadingButton
           fullWidth
           color="inherit"
@@ -303,6 +167,7 @@ export default function JwtCustomerView() {
           variant="contained"
           loading={isSubmitting}
           sx={{
+            mt: 1,
             bgcolor: '#64BFB8',
             color: '#FFFFFF',
             '&:hover': {

@@ -80,8 +80,8 @@ export const endpoints = {
   calendar: '/api/calendar',
   auth: {
     me: '/profile',
-    login: '/login',
-    register: '/signup/caregiver',
+    login: '/auth/login',
+    register: '/auth/signup',
     forgotPassword: '/forgot-password',
     verifyOtpAndChangePassword: '/reset-password',
     verifyRegistrationOtp: '/verify-otp-code',

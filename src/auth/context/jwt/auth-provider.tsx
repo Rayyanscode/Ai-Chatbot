@@ -23,6 +23,7 @@ enum Types {
   REGISTER = 'REGISTER',
   LOGOUT = 'LOGOUT',
   SET_USER = 'SET_USER',
+  CUSTOMER_REGISTER = 'CUSTOMER_REGISTER',
 }
 
 type Payload = {
@@ -33,6 +34,9 @@ type Payload = {
     user: AuthUserType;
   };
   [Types.REGISTER]: {
+    user: AuthUserType;
+  };
+  [Types.CUSTOMER_REGISTER]: {
     user: AuthUserType;
   };
   [Types.LOGOUT]: undefined;
@@ -66,6 +70,12 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
     };
   }
   if (action.type === Types.REGISTER) {
+    return {
+      ...state,
+      user: action.payload.user,
+    };
+  }
+  if (action.type === Types.CUSTOMER_REGISTER) {
     return {
       ...state,
       user: action.payload.user,
@@ -139,7 +149,7 @@ export function AuthProvider({ children }: Props) {
 
   // LOGIN
   const login = useCallback(async (email: string, password: string) => {
-    const response = await axios.post(endpoints.auth.login, { email, password, role: 'Caregiver' });
+    const response = await axios.post(endpoints.auth.login, { email, password });
 
     // console.log('login response', response);
     const { accessToken, user } = response.data.loggedInUser;
@@ -160,17 +170,33 @@ export function AuthProvider({ children }: Props) {
   // REGISTER
   const register = useCallback(
     async (payload: {
-      name: string;
+      businessName: string;
       email: string;
       password: string;
-      primaryUserEmail?: string;
-      isInvited?: boolean;
+      contactInfo: string;
     }) => {
+      try {
+        const response = await axios.post(endpoints.auth.register, payload);
+        console.log('register response', response);
+        const { accessToken, user } = response.data;
+        sessionStorage.setItem(STORAGE_KEY, accessToken);
+        dispatch({ type: Types.REGISTER, payload: { user } });
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+    []
+  );
+
+  // CUSTOMER REGISTER
+  const customerRegister = useCallback(
+    async (payload: { firstName: string; lastName: string; email: string; password: string }) => {
       try {
         const response = await axios.post(endpoints.auth.register, payload);
         const { accessToken, user } = response.data;
         sessionStorage.setItem(STORAGE_KEY, accessToken);
-        dispatch({ type: Types.REGISTER, payload: { user } });
+        dispatch({ type: Types.CUSTOMER_REGISTER, payload: { user } });
       } catch (error) {
         console.error(error);
         throw error;
@@ -239,8 +265,9 @@ export function AuthProvider({ children }: Props) {
       register,
       logout,
       refreshUser,
+      customerRegister,
     }),
-    [login, logout, register, state.user, status, refreshUser]
+    [login, logout, register, state.user, status, refreshUser, customerRegister]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

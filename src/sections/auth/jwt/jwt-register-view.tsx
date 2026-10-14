@@ -40,13 +40,8 @@ export default function JwtRegisterView() {
   const confirmPassword = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name required'),
-    lastName: Yup.string().required('Last name required'),
+    businessName: Yup.string().required('Business name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    primaryUserEmail: Yup.string()
-      .email('Email must be a valid email address')
-      .notOneOf([Yup.ref('email')], 'Email must not be the same as the caregiver  email')
-      .optional(),
     password: Yup.string()
       .required('Password is required')
       .min(8, 'Password must be at least 8 characters long'),
@@ -54,22 +49,15 @@ export default function JwtRegisterView() {
       .required('Confirm password is required')
       .oneOf([Yup.ref('password')], 'Passwords must match')
       .min(8, 'Password must be at least 8 characters long'),
-    isOver18: Yup.boolean().oneOf([true], 'You must confirm that you are over 18 years old'),
-    agreeToTerms: Yup.boolean().oneOf(
-      [true],
-      'You must agree to the Terms & Conditions and Privacy Policy'
-    ),
+    contactInfo: Yup.string().required('Contact info is required'),
   });
 
   const defaultValues = {
-    firstName: '',
-    lastName: '',
+    businessName: '',
     email: '',
-    primaryUserEmail: '',
     password: '',
     confirmPassword: '',
-    isOver18: false,
-    agreeToTerms: false,
+    contactInfo: '',
   };
 
   const methods = useForm({
@@ -86,14 +74,14 @@ export default function JwtRegisterView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const payload = {
-        name: `${data.firstName} ${data.lastName}`,
+        businessName: data.businessName,
         email: data.email,
-        primaryUserEmail: data.primaryUserEmail || undefined,
+        contactInfo: data.contactInfo,
         password: data.password,
       };
       await register(payload);
       enqueueSnackbar('Registration successful', { variant: 'success' });
-      router.push(`${paths.auth.jwt.otpVerification}?email=${encodeURIComponent(data.email)}`);
+      router.push(paths.dashboard.root);
     } catch (error) {
       console.error(error);
       reset();
@@ -118,27 +106,20 @@ export default function JwtRegisterView() {
         {!!errorMsg && <Alert severity="error">{errorMsg}</Alert>}
 
         <RHFTextField
-          name="firstName"
-          label="First Name*"
+          name="businessName"
+          label="Business Name*"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
         <RHFTextField
-          name="lastName"
-          label="Last Name*"
+          name="contactInfo"
+          label="Contact Info*"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
         <RHFTextField
           name="email"
           label="Email*"
-          variant="outlined"
-          InputLabelProps={{ shrink: true }}
-        />
-
-        <RHFTextField
-          name="businessName"
-          label="Business Name"
           variant="outlined"
           InputLabelProps={{ shrink: true }}
         />
