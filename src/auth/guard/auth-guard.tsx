@@ -49,13 +49,13 @@ export default function AuthGuard({ children }: Props) {
     setChecked(true);
   }, [authenticated, loading, method, router, user]);
 
-  // useEffect(() => {
-  //   check();
-  // }, [check]);
+  useEffect(() => {
+    check();
+  }, [check]);
 
-  // if (!checked) {
-  //   return null;
-  // }
+  if (!checked) {
+    return null;
+  }
 
   return <>{children}</>;
 }

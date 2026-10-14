@@ -17,10 +17,11 @@ export default function SettingDetailsView() {
       <Box sx={{ my: 2 }}>
         <Divider />
 
-        <SettingsTabs value={tab} onChange={setTab} />
+        {/* <SettingsTabs value={tab} onChange={setTab} /> */}
       </Box>
 
-      {tab === 0 ? <SettingProfile /> : <ChangePassword />}
+      <SettingProfile />
+      {/* {tab === 0 ? <SettingProfile /> : <ChangePassword />} */}
     </Container>
   );
 }

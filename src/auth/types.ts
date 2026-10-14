@@ -27,21 +27,14 @@ type JWTRegisterPayload = {
   password: string;
   contactInfo: string;
 };
-type JWTCustomerRegisterPayload = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-};
+
 
 // ----------------------------------------------------------------------
 
 type CanRemove = {
   login?: (email: string, password: string) => Promise<AuthUserType | void>;
-  register?:
-    | ((payload: JWTRegisterPayload) => Promise<void>)
-    | ((email: string, password: string, firstName: string, lastName: string) => Promise<void>);
-  //
+  register?: (payload: JWTRegisterPayload) => Promise<AuthUserType | void>;
+
   loginWithGoogle?: () => Promise<void>;
   loginWithGithub?: () => Promise<void>;
   loginWithTwitter?: () => Promise<void>;
@@ -62,7 +55,7 @@ export type JWTContextType = CanRemove & {
   authenticated: boolean;
   unauthenticated: boolean;
   login: (email: string, password: string) => Promise<AuthUserType>;
-  register: (payload: JWTRegisterPayload) => Promise<void>;
+  register: (payload: JWTRegisterPayload) => Promise<AuthUserType>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<AuthUserType>;
 };
@@ -79,7 +72,7 @@ export type FirebaseContextType = CanRemove & {
   loginWithTwitter: () => Promise<void>;
   forgotPassword?: (email: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  register: (payload: JWTRegisterPayload) => Promise<void>;
 };
 
 export type AmplifyContextType = CanRemove & {
@@ -89,12 +82,7 @@ export type AmplifyContextType = CanRemove & {
   authenticated: boolean;
   unauthenticated: boolean;
   login: (email: string, password: string) => Promise<unknown>;
-  register: (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string
-  ) => Promise<unknown>;
+  register: (payload: JWTRegisterPayload) => Promise<unknown>;
   logout: () => Promise<unknown>;
   confirmRegister: (email: string, code: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;

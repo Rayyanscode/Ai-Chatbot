@@ -23,7 +23,6 @@ enum Types {
   REGISTER = 'REGISTER',
   LOGOUT = 'LOGOUT',
   SET_USER = 'SET_USER',
-  CUSTOMER_REGISTER = 'CUSTOMER_REGISTER',
 }
 
 type Payload = {
@@ -36,9 +35,7 @@ type Payload = {
   [Types.REGISTER]: {
     user: AuthUserType;
   };
-  [Types.CUSTOMER_REGISTER]: {
-    user: AuthUserType;
-  };
+
   [Types.LOGOUT]: undefined;
 
   [Types.SET_USER]: {
@@ -70,12 +67,6 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
     };
   }
   if (action.type === Types.REGISTER) {
-    return {
-      ...state,
-      user: action.payload.user,
-    };
-  }
-  if (action.type === Types.CUSTOMER_REGISTER) {
     return {
       ...state,
       user: action.payload.user,
@@ -115,13 +106,13 @@ export function AuthProvider({ children }: Props) {
         setSession(accessToken);
 
         const response = await axios.get(endpoints.auth.me);
-        // console.log('initialize response', response);
-        const { user } = response.data.data;
+        console.log('initialize response', response);
+        const { name, contactInfo } = response.data;
 
         dispatch({
           type: Types.INITIAL,
           payload: {
-            user,
+            user: { name, contactInfo },
           },
         });
       } else {
@@ -152,19 +143,17 @@ export function AuthProvider({ children }: Props) {
     const response = await axios.post(endpoints.auth.login, { email, password });
 
     // console.log('login response', response);
-    const { accessToken, user } = response.data.loggedInUser;
-    setSession(accessToken);
-
-    const userWithEmail = { ...user, email: email || user.email };
+    const { token, user } = response.data;
+    setSession(token);
 
     dispatch({
       type: Types.LOGIN,
       payload: {
-        user: userWithEmail,
+        user: user,
       },
     });
 
-    return userWithEmail;
+    return user;
   }, []);
 
   // REGISTER
@@ -175,32 +164,19 @@ export function AuthProvider({ children }: Props) {
       password: string;
       contactInfo: string;
     }) => {
-      try {
-        const response = await axios.post(endpoints.auth.register, payload);
-        console.log('register response', response);
-        const { accessToken, user } = response.data;
-        sessionStorage.setItem(STORAGE_KEY, accessToken);
-        dispatch({ type: Types.REGISTER, payload: { user } });
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
-    },
-    []
-  );
+      const response = await axios.post(endpoints.auth.register, payload);
 
-  // CUSTOMER REGISTER
-  const customerRegister = useCallback(
-    async (payload: { firstName: string; lastName: string; email: string; password: string }) => {
-      try {
-        const response = await axios.post(endpoints.auth.register, payload);
-        const { accessToken, user } = response.data;
-        sessionStorage.setItem(STORAGE_KEY, accessToken);
-        dispatch({ type: Types.CUSTOMER_REGISTER, payload: { user } });
-      } catch (error) {
-        console.error(error);
-        throw error;
-      }
+      const { token, user } = response.data;
+      setSession(token);
+
+      dispatch({
+        type: Types.REGISTER,
+        payload: {
+          user,
+        },
+      });
+
+      return user;
     },
     []
   );
@@ -230,8 +206,10 @@ export function AuthProvider({ children }: Props) {
 
       setSession(accessToken);
 
+      // Same response shape as initialize(): { name, contactInfo }
       const response = await axios.get(endpoints.auth.me);
-      const { user } = response.data.data;
+      const { name, contactInfo } = response.data;
+      const user = { name, contactInfo };
 
       dispatch({
         type: Types.SET_USER,
@@ -265,9 +243,8 @@ export function AuthProvider({ children }: Props) {
       register,
       logout,
       refreshUser,
-      customerRegister,
     }),
-    [login, logout, register, state.user, status, refreshUser, customerRegister]
+    [login, logout, register, state.user, status, refreshUser]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

@@ -8,9 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -25,7 +23,7 @@ import { RouterLink } from 'src/routes/components';
 import { useAuthContext } from 'src/auth/hooks';
 // components
 import Iconify from 'src/components/iconify';
-import FormProvider, { RHFCheckbox, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -76,12 +74,12 @@ export default function JwtRegisterView() {
       const payload = {
         businessName: data.businessName,
         email: data.email,
-        contactInfo: data.contactInfo,
         password: data.password,
+        contactInfo: data.contactInfo,
       };
       await register(payload);
       enqueueSnackbar('Registration successful', { variant: 'success' });
-      router.push(paths.dashboard.root);
+      router.push(paths.dashboard.documents);
     } catch (error) {
       console.error(error);
       reset();
@@ -92,10 +90,10 @@ export default function JwtRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Enter Your Details</Typography>
+      <Typography variant="h4">Create Your Business Account</Typography>
 
       <Typography variant="body2" color="text.secondary">
-        Kindly fill in all the required fields marked with *.
+        Sign up to list your business, upload PDFs, and power your public AI assistant.
       </Typography>
     </Stack>
   );

@@ -12,11 +12,17 @@ const ROOTS = {
   AUTH: '/auth',
   AUTH_DEMO: '/auth-demo',
   DASHBOARD: '/dashboard',
+  BUSINESS: '/business',
 };
 
 // ----------------------------------------------------------------------
 
 export const paths = {
+  home: '/',
+  business: {
+    root: ROOTS.BUSINESS,
+    detail: (id: string) => `${ROOTS.BUSINESS}/${id}`,
+  },
   comingSoon: '/coming-soon',
   maintenance: '/maintenance',
   pricing: '/pricing',

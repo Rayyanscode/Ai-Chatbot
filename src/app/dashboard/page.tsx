@@ -1,13 +1,10 @@
-// sections
-
-import { DashboardView } from 'src/sections/dashboard/view';
-
-// ----------------------------------------------------------------------
+import { redirect } from 'next/navigation';
+import { paths } from 'src/routes/paths';
 
 export const metadata = {
-  title: 'Dashboard: App',
+  title: 'Dashboard: Media',
 };
 
 export default function DashboardPage() {
-  return <DashboardView />;
+  redirect(paths.dashboard.documents);
 }

@@ -18,7 +18,7 @@ import { updateProfileAPI } from 'src/api/profile';
 
 type FormValues = {
   name: string;
-  email: string;
+  contactInfo: string;
 };
 
 function EditIconButton({ onClick }: { onClick: () => void }) {
@@ -63,16 +63,17 @@ export default function SettingProfile() {
   const { enqueueSnackbar } = useSnackbar();
   const { user, refreshUser } = useAuthContext();
   const [isEditing, setIsEditing] = useState(false);
+  const [isContactInfoEditing, setIsContactInfoEditing] = useState(false);
 
   const schema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
+    contactInfo: Yup.string().required('Contact info is required'),
   });
 
   const defaultValues = useMemo<FormValues>(
     () => ({
       name: user?.name ?? '',
-      email: user?.email ?? '',
+      contactInfo: user?.contactInfo ?? '',
     }),
     [user]
   );
@@ -94,11 +95,12 @@ export default function SettingProfile() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      const response = await updateProfileAPI({ name: data.name });
-      // console.log('updateProfileAPI response', response);
+      const response = await updateProfileAPI({ name: data.name, contactInfo: data.contactInfo });
       await refreshUser();
+      reset(data);
       setIsEditing(false);
-      enqueueSnackbar(response.data.message ?? 'Profile updated successfully', {
+      setIsContactInfoEditing(false);
+      enqueueSnackbar(response?.message ?? 'Profile updated successfully', {
         variant: 'success',
       });
     } catch (error) {
@@ -136,17 +138,24 @@ export default function SettingProfile() {
             />
 
             <RHFTextField
-              name="email"
-              label="Email"
-              disabled
+              name="contactInfo"
+              label="Contact info"
+              disabled={!isContactInfoEditing}
               sx={fieldSx}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <EditIconButton onClick={() => setIsContactInfoEditing(true)} />
+                  </InputAdornment>
+                ),
+              }}
             />
 
             <LoadingButton
               type="submit"
               variant="contained"
               loading={isSubmitting}
-              disabled={!isEditing || !isDirty}
+              disabled={!isDirty}
               sx={{
                 ml: { xs: 0, sm: 'auto' },
                 width: { xs: 1, sm: 'auto' },

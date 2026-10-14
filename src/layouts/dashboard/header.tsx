@@ -65,10 +65,10 @@ export default function Header({ onOpenNav }: Props) {
           sx={{ minWidth: 0, maxWidth: { xs: 180, sm: 280 } }}
         >
           <Typography noWrap variant="body2" fontWeight="bold">
-            {getFirstName(user?.name) || 'jack'}
+            {user?.name || 'Business'}
           </Typography>
           <Typography noWrap variant="body2" color="text.secondary">
-            {user?.role || 'role of the user'}
+            {user?.contactInfo || 'Business account'}
           </Typography>
         </Stack>
       </Stack>

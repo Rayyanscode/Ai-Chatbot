@@ -1,7 +1,9 @@
-import { redirect } from 'next/navigation';
-import { paths } from 'src/routes/paths';
-// ----------------------------------------------------------------------
+import HomeView from 'src/sections/home/home-view';
+
+export const metadata = {
+  title: 'AI Customer Support — Home',
+};
 
 export default function HomePage() {
-  redirect(paths.auth.jwt.login);
+  return <HomeView />;
 }

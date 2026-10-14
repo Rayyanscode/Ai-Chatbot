@@ -1,7 +1,7 @@
 import DocumentsView from 'src/sections/documents/view/documents-view';
 
 export const metadata = {
-  title: 'Dashboard: Documents',
+  title: 'Dashboard: Media',
 };
 
 export default function DocumentsPage() {

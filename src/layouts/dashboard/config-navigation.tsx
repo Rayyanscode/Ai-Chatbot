@@ -3,8 +3,6 @@ import { useMemo } from 'react';
 import { paths } from 'src/routes/paths';
 // locales
 import { useLocales } from 'src/locales';
-// auth
-import { useAuthContext } from 'src/auth/hooks';
 // components
 import SvgColor from 'src/components/svg-color';
 
@@ -28,35 +26,33 @@ const ICONS = {
   settings: icon('settings'),
   exercise: icon('exercise'),
   progress: icon('progress'),
+  file: icon('ic_file'),
+  external: icon('ic_external'),
 };
 
 // ----------------------------------------------------------------------
 
 export function useNavData() {
   const { t } = useLocales();
-  const { user } = useAuthContext();
 
   const data = useMemo(
     () => [
-      // OVERVIEW
-      // ----------------------------------------------------------------------
       {
-        // subheader: t('overview'),
         items: [
           {
-            title: t('Dashboard'),
-            path: paths.dashboard.root,
-            icon: ICONS.dashboard,
-          },
-          {
-            title: t('Documents'),
+            title: t('Media'),
             path: paths.dashboard.documents,
-            icon: ICONS.dashboard,
+            icon: ICONS.file,
           },
           {
             title: t('Settings'),
             path: paths.dashboard.settings,
             icon: ICONS.settings,
+          },
+          {
+            title: t('Business Directory'),
+            path: paths.home,
+            icon: ICONS.external,
           },
         ],
       },

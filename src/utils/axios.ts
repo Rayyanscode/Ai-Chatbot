@@ -79,7 +79,7 @@ export const endpoints = {
   kanban: '/api/kanban',
   calendar: '/api/calendar',
   auth: {
-    me: '/profile',
+    me: '/auth/me',
     login: '/auth/login',
     register: '/auth/signup',
     forgotPassword: '/forgot-password',
@@ -143,10 +143,20 @@ export const endpoints = {
     feedback: '/review-submission',
   },
   profile: {
-    update: '/update-user',
+    update: '/auth/me',
     changePassword: '/change-password',
   },
   submissions: {
     list: '/get-submissions',
+  },
+  documents: {
+    list: '/documents',
+    upload: '/documents/upload',
+    delete: (id: string) => `/documents/${id}`,
+  },
+  businesses: {
+    list: '/businesses',
+    detail: (id: string) => `/businesses/${id}`,
+    chat: (id: string) => `/businesses/${id}/chat`,
   },
 };

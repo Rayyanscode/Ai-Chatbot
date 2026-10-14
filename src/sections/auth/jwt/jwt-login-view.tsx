@@ -8,14 +8,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputAdornment from '@mui/material/InputAdornment';
 // routes
-import { useSearchParams, useRouter } from 'src/routes/hooks';
+import { useRouter } from 'src/routes/hooks';
 // config
-import { PATH_AFTER_LOGIN } from 'src/config-global';
 // hooks
 import { useBoolean } from 'src/hooks/use-boolean';
 // auth
@@ -27,7 +25,6 @@ import { RouterLink } from 'src/routes/components';
 import { paths } from 'src/routes/paths';
 import { useSnackbar } from 'src/components/snackbar';
 import CustomLoadingButton from 'src/components/button/custon-loading-button';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 // ----------------------------------------------------------------------
 
@@ -38,12 +35,7 @@ export default function JwtLoginView() {
 
   const [errorMsg, setErrorMsg] = useState('');
 
-  const searchParams = useSearchParams();
-
-  const returnTo = searchParams.get('returnTo');
-
   const passwordInput = useBoolean();
-  const signupPopover = usePopover();
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
@@ -51,8 +43,8 @@ export default function JwtLoginView() {
   });
 
   const defaultValues = {
-    email: searchParams.get('email') || '',
-    password: searchParams.get('password') || '',
+    email: '',
+    password: '',
   };
 
   const methods = useForm({
@@ -68,15 +60,9 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // const user = await login?.(data.email, data.password);
+      await login?.(data.email, data.password);
 
-      // if (user && user.isVerified === false) {
-      //   enqueueSnackbar('Please verify your account to continue', { variant: 'warning' });
-      //   router.push(`${paths.auth.jwt.verifyAccount}?email=${encodeURIComponent(data.email)}`);
-      //   return;
-      // }
-
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      router.push(paths.dashboard.documents);
       enqueueSnackbar('Login successful', { variant: 'success' });
     } catch (error) {
       console.error(error);
@@ -88,9 +74,9 @@ export default function JwtLoginView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h6">Log In to Your Account</Typography>
+      <Typography variant="h6">Business Login</Typography>
       <Typography sx={{ fontSize: '12px', color: 'text.secondary' }}>
-        Enter Your Account Details Below.
+        Sign in to upload PDFs and manage your AI knowledge base.
       </Typography>
     </Stack>
   );
@@ -124,17 +110,6 @@ export default function JwtLoginView() {
         }}
       />
 
-      {/* <Link
-        variant="body2"
-        color="inherit"
-        underline="always"
-        sx={{ alignSelf: 'flex-end' }}
-        component={RouterLink}
-        href={paths.auth.jwt.forgotPassword}
-      >
-        Forgot password?
-      </Link> */}
-
       <CustomLoadingButton
         fullWidth
         type="submit"
@@ -158,38 +133,15 @@ export default function JwtLoginView() {
       </CustomLoadingButton>
 
       <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
-        Don&apos;t have an account?{' '}
+        Don&apos;t have a business account?{' '}
         <Link
-          component="button"
-          type="button"
-          onClick={signupPopover.onOpen}
+          component={RouterLink}
+          href={paths.auth.jwt.register}
           sx={{ verticalAlign: 'baseline' }}
         >
           Sign up
         </Link>
       </Typography>
-
-      <CustomPopover
-        open={signupPopover.open}
-        onClose={signupPopover.onClose}
-        arrow="top-center"
-        sx={{ width: 180 }}
-      >
-        <MenuItem
-          component={RouterLink}
-          href={paths.auth.jwt.register}
-          onClick={signupPopover.onClose}
-        >
-          Business Admin
-        </MenuItem>
-        <MenuItem
-          component={RouterLink}
-          href={paths.auth.jwt.customer}
-          onClick={signupPopover.onClose}
-        >
-          Customer
-        </MenuItem>
-      </CustomPopover>
     </Stack>
   );
 

@@ -16,7 +16,7 @@ export default function GuestGuard({ children }: Props) {
 
   const searchParams = useSearchParams();
 
-  const returnTo = searchParams.get('returnTo') || paths.dashboard.root;
+  const returnTo = searchParams.get('returnTo') || paths.dashboard.documents;
 
   const { authenticated, user } = useAuthContext();
 
