@@ -1,7 +1,7 @@
 'use client';
 
 // auth
-import { AuthGuard, PrimaryUserGuard } from 'src/auth/guard';
+import { AuthGuard } from 'src/auth/guard';
 // components
 import DashboardLayout from 'src/layouts/dashboard';
 
@@ -14,9 +14,7 @@ type Props = {
 export default function Layout({ children }: Props) {
   return (
     <AuthGuard>
-      <DashboardLayout>
-        <PrimaryUserGuard>{children}</PrimaryUserGuard>
-      </DashboardLayout>
+      <DashboardLayout>{children}</DashboardLayout>
     </AuthGuard>
   );
 }

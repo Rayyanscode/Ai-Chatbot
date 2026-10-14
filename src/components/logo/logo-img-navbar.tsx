@@ -3,7 +3,7 @@ import Box, { BoxProps } from '@mui/material/Box';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-const LOGO_SRC = '/logo/Mindlyft.png';
+const LOGO_SRC = '/logo/chatbot.png';
 
 export default function LogoImgNavbar({ sx, ...other }: BoxProps) {
   return (
@@ -17,7 +17,7 @@ export default function LogoImgNavbar({ sx, ...other }: BoxProps) {
         src={LOGO_SRC}
         alt="logo"
         sx={{
-          width: 150,
+          width: 180,
           height: 80,
           display: 'inline-flex',
           ...sx,

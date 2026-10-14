@@ -44,9 +44,8 @@ import { AuthProvider, AuthConsumer } from 'src/auth/context/jwt';
 // ----------------------------------------------------------------------
 
 export const metadata = {
-  title: 'Mindlyft',
-  description:
-    'Empowering Cognitive Wellness Through Care & Connection',
+  title: 'Ai Customer Support',
+  description: 'Empowering Cognitive Wellness Through Care & Connection',
   keywords: 'react,material,kit,application,dashboard,admin,template',
   themeColor: '#000000',
   manifest: '/manifest.json',

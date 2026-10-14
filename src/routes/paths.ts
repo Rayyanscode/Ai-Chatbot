@@ -85,6 +85,7 @@ export const paths = {
   dashboard: {
     // PATHS RELATED TO CURRENT PROJECT
     root: ROOTS.DASHBOARD,
+    documents: `${ROOTS.DASHBOARD}/documents`,
     yourCircle: `${ROOTS.DASHBOARD}/your-circle`,
     exercises: `${ROOTS.DASHBOARD}/exercises`,
     exerciseGame: (id: string) => `${ROOTS.DASHBOARD}/exercises/${id}`,

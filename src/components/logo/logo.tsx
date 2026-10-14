@@ -17,10 +17,10 @@ const Logo = forwardRef<HTMLImageElement, LogoProps>(
       <Box
         ref={ref}
         component="img"
-        src="/logo/Mindlyft.png" // primary logo
-        alt="Mindlyft Logo"
+        src="/logo/chatbot.png" // primary logo
+        alt="Chatbot Logo"
         onError={(e: any) => {
-          e.currentTarget.src = '/logo/Mindlyft.png'; // fallback PNG
+          e.currentTarget.src = '/logo/chatbot.png'; // fallback PNG
         }}
         sx={{
           width: 70,

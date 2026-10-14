@@ -49,6 +49,11 @@ export function useNavData() {
             icon: ICONS.dashboard,
           },
           {
+            title: t('Documents'),
+            path: paths.dashboard.documents,
+            icon: ICONS.dashboard,
+          },
+          {
             title: t('Settings'),
             path: paths.dashboard.settings,
             icon: ICONS.settings,
