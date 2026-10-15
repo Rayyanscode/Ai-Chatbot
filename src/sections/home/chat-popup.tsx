@@ -112,7 +112,7 @@ export default function ChatPopup({ publicKey, businessName }: Props) {
             bottom: 96,
             right: 24,
             width: { xs: 'calc(100vw - 48px)', sm: 380 },
-            height: 520,
+            height: 410,
             borderRadius: 3,
             display: chatOpen ? 'flex' : 'none',
             flexDirection: 'column',
@@ -264,10 +264,20 @@ function getFallbackReply(userInput: string, businessName: string): string {
   if (lower.includes('hour') || lower.includes('open') || lower.includes('time')) {
     return `${businessName} is open Monday–Friday, 9 AM to 6 PM, and Saturday 10 AM to 4 PM. We are closed on Sundays. Would you like to schedule an appointment?`;
   }
-  if (lower.includes('price') || lower.includes('cost') || lower.includes('fee') || lower.includes('pricing')) {
+  if (
+    lower.includes('price') ||
+    lower.includes('cost') ||
+    lower.includes('fee') ||
+    lower.includes('pricing')
+  ) {
     return `Our pricing depends on the specific service or product. Could you tell me more about what you're looking for? I can give you a more accurate estimate.`;
   }
-  if (lower.includes('contact') || lower.includes('reach') || lower.includes('email') || lower.includes('phone')) {
+  if (
+    lower.includes('contact') ||
+    lower.includes('reach') ||
+    lower.includes('email') ||
+    lower.includes('phone')
+  ) {
     return `You can reach ${businessName} via the contact details shown on this page. Our team typically responds within 1 business day. Is there something specific I can help you with right now?`;
   }
   if (lower.includes('location') || lower.includes('address') || lower.includes('where')) {
